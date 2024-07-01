@@ -1,0 +1,173 @@
+/* css/styles.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #acdbff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    height: 80vh;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.progress-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 2;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+}
+
+.step.active {
+    background-color: #007BFF;
+}
+
+form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.form-step {
+    display: none;
+    flex: 1;
+}
+
+.form-step.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+label {
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+input[type="text"],
+input[type="color"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="text"]::placeholder {
+    color: #a9a9a9;
+}
+
+.radio-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    font-size: 1em;
+}
+
+.radio-group input {
+    margin: 0 10px;
+    accent-color: #007BFF;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+    accent-color: #007BFF;
+    border-radius: 50%;
+}
+
+small {
+    font-size: 75%;
+    color: #666;
+}
+
+.error {
+    color: red;
+    font-size: 75%;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button.prev-btn {
+    background-color: #6c757d;
+}
+
+button.prev-btn:hover {
+    background-color: #5a6268;
+}
+
+button.submit-btn {
+    display: none;
+}
+
+button.submit-btn.active {
+    display: inline-block;
+}
+
+.buttons-container .next-btn {
+    margin-left: auto;
+}

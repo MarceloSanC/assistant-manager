@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração do Chatbot</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+            <div class="progress-steps">
+                <div class="step active" id="step-1">1</div>
+                <div class="step" id="step-2">2</div>
+                <div class="step" id="step-3">3</div>
+                <div class="step" id="step-4">4</div>
+            </div>
+        </div>
+        <form id="setup-form">
+            <div class="form-step active" id="form-step-1">
+                <h2>Informações do Perfil do Chatbot</h2>
+                <label for="establishment-name">Nome do estabelecimento:</label>
+                <input type="text" id="establishment-name" name="establishment-name" placeholder="Ex: Restaurante do João" required>
+                <small>Será exibido como o nome do número do WhatsApp para seus clientes</small>
+                
+                <label for="phone-number">Número de telefone para o chatbot:</label>
+                <input type="text" id="phone-number" name="phone-number" placeholder="Ex: +55 (12) 912345678" required>
+                <small id="phone-error" class="error"></small>
+                <small>O número de telefone que será utilizado para hospedar o chatbot. Recomenda-se que este número seja exclusivo para uso do Chatbot</small>
+            </div>
+            <div class="form-step" id="form-step-2">
+                <h2>Modalidade e Atendimento</h2>
+                <label for="modality">Selecione a modalidade de entrega de pedidos utilizada no seu restaurante:</label>
+                <select id="modality" name="modality" required>
+                    <option value="restaurant">Mesas</option>
+                    <option value="command">Comandas ou Cartelas</option>
+                    <option value="delivery">Apenas Delivery (Não implementado.#teste)</option>
+                </select>
+            
+                <label for="attendants-available">Possui atendentes disponíveis para conversar com os clientes via WhatsApp, caso solicitado pelo cliente?</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="attendants-available" value="yes" checked> Sim
+                    </label>
+                    <label>
+                        <input type="radio" name="attendants-available" value="no"> Não
+                    </label>
+                </div>
+            
+                <label for="waiters-available">Possui Garçons disponíveis para serem chamados pelos clientes via WhatsApp?</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="waiters-available" value="yes" checked> Sim
+                    </label>
+                    <label>
+                        <input type="radio" name="waiters-available" value="no"> Não
+                    </label>
+                </div>
+            </div>
+            <div class="form-step" id="form-step-3">
+                <h2>Etapa 3: Personalização</h2>
+                <label for="color">Cor do Chatbot:</label>
+                <input type="color" id="color" name="color" required>
+            </div>
+            <div class="form-step" id="form-step-4">
+                <h2>Etapa 4: Revisão e Ativação</h2>
+                <p>Reveja as informações e clique em "Ativar" para finalizar.</p>
+            </div>
+            <div class="buttons-container">
+                <button type="button" class="prev-btn">Anterior</button>
+                <button type="button" class="next-btn">Próximo</button>
+                <button type="submit" class="submit-btn">Ativar</button>
+            </div>
+        </form>
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+</html>
