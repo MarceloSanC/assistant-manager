@@ -1,0 +1,117 @@
+/* Setup.css */
+
+.setup-page {
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  background-color: lightblue;
+}
+
+.setup-box {
+  width: 60%;
+  max-width: 600px;
+  margin: 50px;
+  padding: 40px; 
+  background-color: white; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.setup-title {
+  font-size: 2em; 
+  margin-bottom: 20px; 
+  text-align: center; 
+}
+
+.setup-form {
+  display: flex; 
+  flex-direction: column; 
+}
+
+.setup-input {
+  padding: 10px; 
+  font-size: 1em; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+}
+
+.setup-button {
+  padding: 10px 20px; 
+  font-size: 1em; 
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  cursor: pointer; 
+}
+
+.home-button {
+  margin-top: 30px;
+  padding: 20px 30px; 
+  font-size: 1.5em; 
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  cursor: pointer;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.setup-button:hover {
+  background-color: #0056b3; 
+}
+
+.buttons-section {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 40px;
+}
+
+.next-button {
+  margin-left: auto;
+}
+
+.prev-button {
+  margin-right: auto;
+}
+
+h2,
+h3 {
+  font-size: 1.5em;
+  margin-top: 20px;
+  margin-bottom: 0; /* Adiciona esta linha */
+}
+
+small {
+  font-size: 75%;
+  color: #666;
+}
+
+.step1,
+.step2,
+.step3,
+.step4,
+.step5,
+.step6,
+.step7 {
+  display: none;
+}
+
+.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkbox-section {
+  font-size: 1em;
+  display: flex;
+  flex-direction: column; /* Adiciona esta linha */
+}
+
+.checkbox-section label {
+  margin: 5px 0; /* Adiciona espaçamento entre os labels */
+}
+
+.error-text {
+  color: red;
+}

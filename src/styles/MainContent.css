@@ -1,0 +1,90 @@
+.first-section {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  background-color: white; /* Define a cor de fundo do conteúdo principal como branca */
+  flex: 1; /* Faz com que o main-content ocupe o espaço disponível entre o header e o footer */
+}
+
+.main-title {
+  font-size: 2.5em; /* Define o tamanho da fonte do texto principal */
+  margin-bottom: 20px; /* Adiciona um espaçamento abaixo do texto principal */
+}
+
+.main-text {
+  font-size: 1.5em; /* Define o tamanho da fonte do texto secundário */
+  margin-bottom: 20px; /* Adiciona um espaçamento abaixo do texto secundário */
+}
+
+.sub-title {
+  font-size: 1em; /* Define o tamanho da fonte do texto abaixo da imagem */
+  margin-bottom: 20px; /* Adiciona um espaçamento abaixo do texto */
+}
+
+.sub-text {
+  font-size: 1em; /* Define o tamanho da fonte do texto abaixo da imagem */
+  margin-bottom: 20px; /* Adiciona um espaçamento abaixo do texto */
+}
+
+.main-image {
+  width: 100%; /* Faz com que a imagem ocupe toda a largura da página */
+  height: auto; /* Mantém a proporção da imagem */
+}
+
+.main-button {
+  display: block; /* Faz com que o botão seja um elemento em bloco */
+  margin: 0 auto; /* Centraliza o botão horizontalmente */
+  padding: 10px 20px; /* Adiciona um espaçamento interno ao botão */
+  font-size: 1.4em; /* Define o tamanho da fonte do botão */
+  background-color: #007BFF; /* Define a cor de fundo do botão */
+  color: white;
+  border: none; /* Remove a borda do botão */
+  cursor: pointer; /* Muda o cursor para uma mãozinha ao passar sobre o botão */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra ao botão para dar um efeito de profundidade */
+}
+
+.main-button:hover {
+  background-color: #add8e6; /* Muda a cor de fundo do botão ao passar o mouse */
+}
+
+.second-section {
+  display: flex; /* Utiliza flexbox para organizar os elementos */
+  justify-content: space-between; /* Distribui os elementos igualmente na linha */
+  align-items: center; /* Centraliza verticalmente os itens */
+  margin-top: 50px; /* Adiciona um espaçamento abaixo da second-section */
+  margin-bottom: 50px; /* Adiciona um espaçamento abaixo da second-section */
+  max-height: 200px;
+}
+
+.second-text {
+  flex: 1; /* Faz com que ocupe o espaço restante disponível */
+  margin-right: 20px; /* Adiciona um espaçamento à direita */
+  text-align: left;
+  padding-left: 10%;
+}
+
+.second-image {
+  flex: 1; /* Faz com que ocupe o espaço restante disponível */
+  display: flex; /* Utiliza flexbox para centralizar a imagem */
+  justify-content: center; /* Centraliza horizontalmente a imagem */
+  align-items: center; /* Centraliza verticalmente a imagem */
+}
+
+.side-image {
+  max-width: 100%; /* Limita o tamanho máximo da imagem */
+  max-height: 200px; /* Limita o tamanho máximo da imagem */
+  padding-right: 30%;
+  height: auto; /* Mantém a proporção da imagem */
+}
+
+.third-section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
