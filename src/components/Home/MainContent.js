@@ -20,6 +20,13 @@ function MainContent() {
           Traga a modernidade para seu restaurante.
           <br /> Com o Bix Assistant, você agiliza o atendimento em seu restaurante, gerencia os pedidos, fluxo de caixa. Tudo sem sair do Whats App!
         </p>
+        <div className="third-section">
+          <ErrorBoundary>
+            <button className="main-button" onClick={handleButtonClick}>
+              Ativar Bix Assistant
+            </button>
+          </ErrorBoundary>
+        </div>
         <img className="main-image" src={restaurantCellphone} alt="Restaurant Cellphone" />
       </div>
       <div className="second-section">
