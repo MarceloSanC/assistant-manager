@@ -39,7 +39,7 @@ const activateChatbot = async (chatbotConfig, setQrCode, setIsLoading, setQrErro
   };
 
   try {
-    const response = await fetch("http://localhost:5002/config/createChatbot", requestOptions); //http://54.227.229.46:5002
+    const response = await fetch("http://54.227.229.46:5002/config/createChatbot", requestOptions); //http://54.227.229.46:5002
     const result = await response.json();
     console.log('QR Code: ', result);
     setQrCode(result);

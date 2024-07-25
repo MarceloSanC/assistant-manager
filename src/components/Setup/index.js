@@ -7,7 +7,7 @@ import logoBix from "../../assets/images/Logo-Bix.png";
 function Setup() {
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [establishmentName, setEstablishmentName] = useState("Assistente Bix");
+  const [establishmentName, setEstablishmentName] = useState("Toca do Surubim");
   const [phoneNumber, setPhoneNumber] = useState("+55 (48) 99148-7526");
   const [secretKey, setSecretKey] = useState("BIXTOKEN");
 
@@ -69,7 +69,7 @@ function Setup() {
       default:
         break;
     }
-    if (Object.keys(formErrors).length === 0) {
+    if (Object.keys(formErrors).length === 0 && currentStep !== 7) {
       setCurrentStep((prevStep) => prevStep + 1);
     }
 
