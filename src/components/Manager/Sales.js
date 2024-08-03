@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Manager.css';
+import './Manager.css';
 
 function Sales({ sales, setSales }) {
   const handleSalesChange = (field, value) => {
@@ -40,6 +40,7 @@ function Sales({ sales, setSales }) {
         <label>Tempo para Oferecer Produtos Recorrentes:</label>
         <input
           type="text"
+          style={{ width: "10%", minWidth: "100px", textAlign: "center" }}
           value={sales.timeToOfferRecurringProducts}
           onChange={(e) => handleSalesChange('timeToOfferRecurringProducts', e.target.value)}
           placeholder="hh:mm:ss"

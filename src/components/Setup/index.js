@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Setup.css";
+import "./Setup.css";
 import { activateChatbot, formatProductList } from "./functions";
 import logoBix from "../../assets/images/Logo-Bix.png";
 

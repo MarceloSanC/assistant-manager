@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/Header.css";
+import "./Header.css";
 import logoBix from '../../assets/images/Logo-Bix.png';
 import profilePic from '../../assets/images/Logo.png';
 

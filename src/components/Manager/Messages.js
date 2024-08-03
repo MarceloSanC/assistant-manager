@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Manager.css';
+import './Manager.css';
 
 function Messages({ messages, setMessages }) {
   const handleMessagesChange = (field, value) => {

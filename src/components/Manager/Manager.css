@@ -217,4 +217,5 @@ input:checked + .slider:before {
 /* Segunda div.form-group ocupa 30% do espaço */
 .profile-image-section .form-group:last-child {
   flex: 0 0 30%;
+  margin-left: 5px;
 }

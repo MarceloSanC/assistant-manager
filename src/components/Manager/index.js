@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/Manager.css';
+import './Manager.css';
 import logoBix from '../../assets/images/Logo-Bix.png';
 import Profile from './Profile';
 import Products from './Products';
@@ -133,10 +133,16 @@ function Manager() {
             onClick={() => window.location.href = '/'}
             style={{ cursor: 'pointer' }}
           />
-          <h1>Configuração do Chatbot</h1>
+          <h1>Gerenciador Assistente Bix</h1>
         </div>
         <div className="panel-content">
           <div className="nav-menu">
+          <button
+              className={`nav-button ${pageConfig.currentSection === 'session' ? 'active' : ''}`}
+              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
+            >
+              Sessão Whats App
+            </button>
             <button
               className={`nav-button ${pageConfig.currentSection === 'profile' ? 'active' : ''}`}
               onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'profile')}
@@ -172,13 +178,7 @@ function Manager() {
               onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'messages')}
             >
               Mensagens
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'session' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
-            >
-              Sessão Whats App
-            </button>
+            </button>        
           </div>
           <div className="form-section">
             {renderSection()}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/MainContent.css";
+import "./MainContent.css";
 import restaurantCellphone from "../../assets/images/restaurant-cellphone.jpg";
 import icons from "../../assets/images/icons.jpg";
 import ErrorBoundary from "../../js/ErrorBoundary";

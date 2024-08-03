@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Manager.css';
+import './Manager.css';
 
 function Session({ connectionStatus, qrCode, generateQRCode }) {
   return (
