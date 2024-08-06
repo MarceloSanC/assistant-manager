@@ -1,27 +1,38 @@
 import React from 'react';
-import './Manager.css';
+import { Box, Heading, Text, Image, Button, FormControl, FormLabel, VStack } from '@chakra-ui/react';
 
-function Session({ connectionStatus, qrCode, generateQRCode }) {
+function Session({ session, setSession }) {
+  const generateQRCode = () => {
+    // Função para gerar QR Code aqui
+    // Exemplo de atualização do estado:
+    setSession((prevSession) => ({
+      ...prevSession,
+      qrCode: 'new-qr-code-url'
+    }));
+  };
+
   return (
-    <div className="form-section">
-      <h2>Sessão Whats App</h2>
-      <div className="form-group">
-        <label>Status da Conexão:</label>
-        <p>{connectionStatus}</p>
-        <small className="hint">Exibe o status da conexão com o WhatsApp.</small>
-      </div>
-      <div className="form-group qr-code-container">
-        {qrCode ? (
-          <img src={qrCode} alt="QR Code" />
-        ) : (
-          <p>Nenhum QR Code disponível.</p>
-        )}
-        <small className="hint">Mostra o QR Code quando disponível.</small>
-      </div>
-      <button className="activate-button" onClick={generateQRCode}>
-        Gerar QR Code
-      </button>
-    </div>
+    <Box className="form-section" p={5}>
+      <Heading as="h2" size="md" mb={4}>Sessão Whats App</Heading>
+      <VStack spacing={4} align="stretch">
+        <FormControl>
+          <FormLabel>Status da Conexão:</FormLabel>
+          <Text>{session.connectionStatus}</Text>
+          <Text fontSize="sm" color="gray.500">Exibe o status da conexão com o WhatsApp.</Text>
+        </FormControl>
+        <FormControl>
+          {session.qrCode ? (
+            <Image src={session.qrCode} alt="QR Code" />
+          ) : (
+            <Text>Nenhum QR Code disponível.</Text>
+          )}
+          <Text fontSize="sm" color="gray.500">Mostra o QR Code quando disponível.</Text>
+        </FormControl>
+        <Button colorScheme="blue" onClick={generateQRCode}>
+          Gerar QR Code
+        </Button>
+      </VStack>
+    </Box>
   );
 }
 

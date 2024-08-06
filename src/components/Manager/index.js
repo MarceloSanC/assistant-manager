@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Manager.css';
+import { Box, Button, Flex, Heading, Image, VStack } from '@chakra-ui/react';
 import logoBix from '../../assets/images/Logo-Bix.png';
 import Profile from './Profile';
 import Products from './Products';
@@ -8,7 +8,7 @@ import Groups from './Groups';
 import Sales from './Sales';
 import Messages from './Messages';
 import Session from './Session';
-import { handleChatbotConfigChange, handlePageConfigChange, handleFileUpload } from './functions';
+import { handlePageConfigChange, handleFileUpload } from './functions';
 
 function Manager() {
   const [pageConfig, setPageConfig] = useState({
@@ -19,43 +19,47 @@ function Manager() {
     qrError: null
   });
 
-  const [chatbotConfig, setChatbotConfig] = useState({
-    profile: {
-      establishmentName: "Toca do Surubim",
-      phoneNumber: "+55 (48) 99148-7526",
-      profileImage: null
-    },
-    products: {
-      dayCsvFile: null,
-      topDayProductsId: "2,6,9,35,39,48",
-      nightCsvFile: null,
-      topNightProductsId: "2,6,9,24,30,86,119"
-    },
-    modality: {
-      modality: 'Mesa',
-      tableInterval: { min: 1, max: 10 },
-      excludedValues: ""
-    },
-    groups: {
-      orders: true,
-      cashier: true,
-      attendant: true,
-      waiter: true
-    },
-    sales: {
-      productRecommendations: true,
-      recurringProductsResell: true,
-      timeToOfferRecurringProducts: "00:30:00"
-    },
-    messages: {
-      genericMessage1: "",
-      genericMessage2: "",
-      genericMessage3: ""
-    },
-    session: {
-      connectionStatus: "Desconectado",
-      qrCode: null
-    }
+  const [profile, setProfile] = useState({
+    establishmentName: "Toca do Surubim",
+    phoneNumber: "+55 (48) 99148-7526",
+    profileImage: null
+  });
+
+  const [products, setProducts] = useState({
+    dayCsvFile: null,
+    topDayProductsId: "2,6,9,35,39,48",
+    nightCsvFile: null,
+    topNightProductsId: "2,6,9,24,30,86,119"
+  });
+
+  const [modality, setModality] = useState({
+    modality: 'Mesa',
+    tableInterval: { min: 1, max: 10 },
+    excludedValues: ""
+  });
+
+  const [groups, setGroups] = useState({
+    orders: true,
+    cashier: true,
+    attendant: true,
+    waiter: true
+  });
+
+  const [sales, setSales] = useState({
+    productRecommendations: true,
+    recurringProductsResell: true,
+    timeToOfferRecurringProducts: "30"
+  });
+
+  const [messages, setMessages] = useState({
+    genericMessage1: "",
+    genericMessage2: "",
+    genericMessage3: ""
+  });
+
+  const [session, setSession] = useState({
+    connectionStatus: "Desconectado",
+    qrCode: null
   });
 
   const renderSection = () => {
@@ -63,58 +67,51 @@ function Manager() {
       case 'profile':
         return (
           <Profile
-            profile={chatbotConfig.profile}
-            setProfile={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'profile', key, value)}
+            profile={profile}
+            setProfile={setProfile}
           />
         );
       case 'products':
         return (
           <Products
-            products={chatbotConfig.products}
-            handleFileUpload={(key, file) => handleFileUpload(setChatbotConfig, 'products', key, file)}
-            setProducts={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'products', key, value)}
+            products={products}
+            handleFileUpload={(key, file) => handleFileUpload(setProducts, key, file)}
+            setProducts={setProducts}
           />
         );
       case 'modality':
         return (
           <Modality
-            modality={chatbotConfig.modality.modality}
-            setModality={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'modality', key, value)}
-            tableInterval={chatbotConfig.modality.tableInterval}
-            setTableInterval={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'modality', key, value)}
-            excludedValues={chatbotConfig.modality.excludedValues}
-            setExcludedValues={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'modality', key, value)}
+            modality={modality}
+            setModality={setModality}
           />
         );
       case 'groups':
         return (
           <Groups
-            groups={chatbotConfig.groups}
-            setGroups={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'groups', key, value)}
+            groups={groups}
+            setGroups={setGroups}
           />
         );
       case 'sales':
         return (
           <Sales
-            sales={chatbotConfig.sales}
-            setSales={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'sales', key, value)}
+            sales={sales}
+            setSales={setSales}
           />
         );
       case 'messages':
         return (
           <Messages
-            messages={chatbotConfig.messages}
-            setMessages={(key, value) => handleChatbotConfigChange(setChatbotConfig, 'messages', key, value)}
+            messages={messages}
+            setMessages={setMessages}
           />
         );
       case 'session':
         return (
           <Session
-            connectionStatus={chatbotConfig.session.connectionStatus}
-            qrCode={chatbotConfig.session.qrCode}
-            generateQRCode={() => {
-              // Função para gerar QR Code aqui
-            }}
+            session={session}
+            setSession={setSession}
           />
         );
       default:
@@ -123,69 +120,61 @@ function Manager() {
   };
 
   return (
-    <div className="manager">
-      <div className="panel">
-        <div className="panel-header">
-          <img
-            src={logoBix}
-            alt="Logo Bix"
-            className="logo"
-            onClick={() => window.location.href = '/'}
-            style={{ cursor: 'pointer' }}
-          />
-          <h1>Gerenciador Assistente Bix</h1>
-        </div>
-        <div className="panel-content">
-          <div className="nav-menu">
-          <button
-              className={`nav-button ${pageConfig.currentSection === 'session' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
-            >
-              Sessão Whats App
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'profile' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'profile')}
-            >
-              Perfil Whats App
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'products' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'products')}
-            >
-              Produtos e Adicionais
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'modality' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'modality')}
-            >
-              Modalidade
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'groups' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'groups')}
-            >
-              Grupos
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'sales' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'sales')}
-            >
-              Vendas
-            </button>
-            <button
-              className={`nav-button ${pageConfig.currentSection === 'messages' ? 'active' : ''}`}
-              onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'messages')}
-            >
-              Mensagens
-            </button>        
-          </div>
-          <div className="form-section">
-            {renderSection()}
-          </div>
-        </div>
-      </div>
-    </div>
+    <Flex direction="column" align="center" p={4}>
+      <Flex justify="space-between" align="center" width="100%" mb={4}>
+        <Image src={logoBix} alt="Logo Bix" maxWidth="100px" height="auto" cursor="pointer" onClick={() => window.location.href = '/'}/>
+        <Heading as="h1" size="lg" fontStyle='roboto'>Gerenciador Assistente Bix</Heading>
+      </Flex>
+      <Flex width="100%" justify="center">
+        <VStack align="stretch" spacing={4} width="20%">
+          <Button
+            colorScheme={pageConfig.currentSection === 'session' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
+          >
+            Sessão Whats App
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'profile' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'profile')}
+          >
+            Perfil Whats App
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'products' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'products')}
+          >
+            Produtos e Adicionais
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'modality' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'modality')}
+          >
+            Modalidade
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'groups' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'groups')}
+          >
+            Grupos
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'sales' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'sales')}
+          >
+            Vendas
+          </Button>
+          <Button
+            colorScheme={pageConfig.currentSection === 'messages' ? 'blue' : 'gray'}
+            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'messages')}
+          >
+            Mensagens
+          </Button>
+        </VStack>
+        <Box flex="1" p={4}>
+          {renderSection()}
+        </Box>
+      </Flex>
+    </Flex>
   );
 }
 

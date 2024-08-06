@@ -1,8 +1,8 @@
 import * as XLSX from "xlsx";
-// import axios from "axios";
+
+const url = "http://54.227.229.46:5002/config/";
 
 // Função activateChatbot que gera o objeto chatbot e envia para o endpoint
-// functions.js
 const activateChatbot = async (chatbotConfig, setQrCode, setIsLoading, setQrError) => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -39,7 +39,7 @@ const activateChatbot = async (chatbotConfig, setQrCode, setIsLoading, setQrErro
   };
 
   try {
-    const response = await fetch("http://54.227.229.46:5002/config/createChatbot", requestOptions); //http://54.227.229.46:5002
+    const response = await fetch(url + 'createChatbot', requestOptions); //http://54.227.229.46:5002
     const result = await response.json();
     console.log('QR Code: ', result);
     setQrCode(result);
@@ -68,17 +68,7 @@ const formatProductList = async (file, callback) => {
       if (!result[category]) {
         result[category] = {};
       }
-
-      if (!item.Codigo || !item.NomeProduto || !item.Valor || !category) {
-        console.log("\x1b[33m", `Invalid Codigo:${item.Codigo} NomeProduto:${item.NomeProduto} Valor:${item.Valor} category:${category}`, "\x1b[0m");
-      }
-
-      result[category][item.Codigo] = {
-        id: item.Codigo,
-        name: item.NomeProduto,
-        price: parseFloat(item.Valor.toString().replace(",", ".")),
-        category: category,
-      };
+      result[category][item.Produto] = item;
     });
 
     callback(result);
@@ -87,32 +77,69 @@ const formatProductList = async (file, callback) => {
   reader.readAsBinaryString(file);
 };
 
-const handleChatbotConfigChange = (setChatbotConfig, category, key, value) => {
-  setChatbotConfig((prevState) => ({
-    ...prevState,
-    [category]: {
-      ...prevState[category],
-      [key]: value
+let timeoutId;
+
+const debounce = (callback, delay) => {
+  return (...args) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
     }
-  }));
+    timeoutId = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+};
+
+const sendUpdate = async (field, value) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const body = JSON.stringify({
+    field,
+    value,
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(url + 'updateChatbot', requestOptions);
+    const result = await response.json();
+    console.log('Update result: ', result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const debouncedSendUpdate = debounce(sendUpdate, 5000);
+
+const handleChatbotConfigChange = (category, key, value) => {
+  debouncedSendUpdate(`${category}.${key}`, value);
 };
 
 const handlePageConfigChange = (setPageConfig, key, value) => {
-  setPageConfig((prevState) => ({
-    ...prevState,
-    [key]: value
+  setPageConfig((prevConfig) => ({
+    ...prevConfig,
+    [key]: value,
   }));
 };
 
-const handleFileUpload = (setChatbotConfig, category, key, file) => {
-  setChatbotConfig((prevState) => ({
-    ...prevState,
-    [category]: {
-      ...prevState[category],
-      [key]: file
-    }
-  }));
+const handleFileUpload = (setChatbotConfig, section, key, file) => {
+  if (file) {
+    formatProductList(file, (formattedList) => {
+      handleChatbotConfigChange(setChatbotConfig, section, key, formattedList);
+    });
+  }
 };
 
-
-export { activateChatbot, formatProductList, handleChatbotConfigChange, handlePageConfigChange, handleFileUpload };
+export {
+  activateChatbot,
+  formatProductList,
+  handleChatbotConfigChange,
+  handlePageConfigChange,
+  handleFileUpload
+};

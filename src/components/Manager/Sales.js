@@ -1,53 +1,61 @@
 import React from 'react';
-import './Manager.css';
+import { Box, Heading, FormControl, FormLabel, Switch, Input, VStack, Text } from '@chakra-ui/react';
 
 function Sales({ sales, setSales }) {
-  const handleSalesChange = (field, value) => {
+  const handleSalesChange = (field) => {
     setSales(prevSales => ({
       ...prevSales,
-      [field]: value
+      [field]: !prevSales[field]
+    }));
+  };
+
+  const handleTimeChange = (e) => {
+    const value = e.target.value;
+    setSales(prevSales => ({
+      ...prevSales,
+      timeToOfferRecurringProducts: value
     }));
   };
 
   return (
-    <div className="form-section">
-      <h2>Vendas</h2>
-      <div className="form-group">
-        <label>Recomendação de Produtos:</label>
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={sales.productRecommendations}
-            onChange={(e) => handleSalesChange('productRecommendations', e.target.checked)}
+    <Box className="form-section" p={5}>
+      <Heading as="h2" size="md" mb={4}>Vendas</Heading>
+      <VStack spacing={4} align="stretch">
+        <FormControl display="flex" alignItems="center">
+          <FormLabel htmlFor="product-recommendations" mb="0">
+            Recomendação de Produtos:
+          </FormLabel>
+          <Switch
+            id="product-recommendations"
+            isChecked={sales.productRecommendations}
+            onChange={() => handleSalesChange('productRecommendations')}
           />
-          <span className="slider round"></span>
-        </label>
-        <small className="hint">Ative ou desative a recomendação de produtos.</small>
-      </div>
-      <div className="form-group">
-        <label>Revenda de Produtos Recorrentes:</label>
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={sales.recurringProductsResell}
-            onChange={(e) => handleSalesChange('recurringProductsResell', e.target.checked)}
+          <Text fontSize="sm" color="gray.500" ml={2}>Ative ou desative a recomendação de produtos.</Text>
+        </FormControl>
+        <FormControl display="flex" alignItems="center">
+          <FormLabel htmlFor="recurring-products-resell" mb="0">
+            Revenda de Produtos Recorrentes:
+          </FormLabel>
+          <Switch
+            id="recurring-products-resell"
+            isChecked={sales.recurringProductsResell}
+            onChange={() => handleSalesChange('recurringProductsResell')}
           />
-          <span className="slider round"></span>
-        </label>
-        <small className="hint">Ative ou desative a revenda de produtos recorrentes.</small>
-      </div>
-      <div className="form-group">
-        <label>Tempo para Oferecer Produtos Recorrentes:</label>
-        <input
-          type="text"
-          style={{ width: "10%", minWidth: "100px", textAlign: "center" }}
-          value={sales.timeToOfferRecurringProducts}
-          onChange={(e) => handleSalesChange('timeToOfferRecurringProducts', e.target.value)}
-          placeholder="hh:mm:ss"
-        />
-        <small className="hint">Insira o tempo para oferecer produtos recorrentes.</small>
-      </div>
-    </div>
+          <Text fontSize="sm" color="gray.500" ml={2}>Ative ou desative a revenda de produtos recorrentes.</Text>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Tempo para Oferecer Produtos Recorrentes:</FormLabel>
+          <Input
+            type="text"
+            style={{ width: "10%", minWidth: "100px", textAlign: "center" }}
+            value={sales.timeToOfferRecurringProducts}
+            onChange={handleTimeChange}
+            placeholder="hh:mm"
+          />
+          <Text fontSize="sm" color="gray.500">Insira o tempo para oferecer produtos recorrentes.</Text>
+        </FormControl>
+      </VStack>
+    </Box>
   );
 }
 

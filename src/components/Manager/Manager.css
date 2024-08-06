@@ -130,7 +130,6 @@ html, body, #root {
   background-color: #0056b3;
 }
 
-/* Estilo para o botão deslizante */
 .switch {
   position: relative;
   display: inline-block;
@@ -151,7 +150,7 @@ html, body, #root {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: grey;
   transition: .4s;
   border-radius: 34px;
 }
@@ -169,7 +168,7 @@ html, body, #root {
 }
 
 input:checked + .slider {
-  background-color: #007bff;
+  background-color: blue;
 }
 
 input:checked + .slider:before {

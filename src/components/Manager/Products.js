@@ -1,52 +1,61 @@
 import React from 'react';
-import './Manager.css';
+import { Box, Heading, Input, FormControl, FormLabel, VStack, Text } from '@chakra-ui/react';
 
 function Products({ products, setProducts }) {
   const handleProductsChange = (field, value) => {
-    setProducts(prevProducts => ({
+    setProducts((prevProducts) => ({
       ...prevProducts,
-      [field]: value
+      [field]: value,
+    }));
+  };
+
+  const handleFileUpload = (field, file) => {
+    setProducts((prevProducts) => ({
+      ...prevProducts,
+      [field]: file,
     }));
   };
 
   return (
-    <div className="form-section">
-      <h2>Produtos e Adicionais</h2>
-      <div className="form-group">
-        <label>Tabela de Cardápio Diurno:</label>
-        <input
-          type="file"
-          onChange={(e) => handleProductsChange('dayCsvFile', e.target.files[0])}
-        />
-        <small className="hint">Envie um arquivo .csv ou .xlsx com o cardápio diurno.</small>
-      </div>
-      <div className="form-group">
-        <label>Lista de IDs dos Produtos Mais Pedidos Diurno:</label>
-        <input
-          type="text"
-          value={products.topDayProductsId}
-          onChange={(e) => handleProductsChange('topDayProductsId', e.target.value)}
-        />
-        <small className="hint">Insira uma lista de IDs dos produtos mais pedidos durante o dia.</small>
-      </div>
-      <div className="form-group">
-        <label>Tabela de Cardápio Noturno:</label>
-        <input
-          type="file"
-          onChange={(e) => handleProductsChange('nightCsvFile', e.target.files[0])}
-        />
-        <small className="hint">Envie um arquivo .csv ou .xlsx com o cardápio noturno.</small>
-      </div>
-      <div className="form-group">
-        <label>Lista de IDs dos Produtos Mais Pedidos Noturno:</label>
-        <input
-          type="text"
-          value={products.topNightProductsId}
-          onChange={(e) => handleProductsChange('topNightProductsId', e.target.value)}
-        />
-        <small className="hint">Insira uma lista de IDs dos produtos mais pedidos durante a noite.</small>
-      </div>
-    </div>
+    <Box className="form-section" p={5}>
+      <Heading as="h2" size="md" mb={4}>Produtos e Adicionais</Heading>
+      <VStack spacing={4} align="stretch">
+        <FormControl>
+          <FormLabel>Tabela de Cardápio Diurno:</FormLabel>
+          <Input
+            type="file"
+            onChange={(e) => handleFileUpload('dayCsvFile', e.target.files[0])}
+          />
+          <Text fontSize="sm" color="gray.500">Envie um arquivo .csv ou .xlsx com o cardápio diurno.</Text>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Lista de IDs dos Produtos Mais Pedidos Diurno:</FormLabel>
+          <Input
+            type="text"
+            value={products.topDayProductsId}
+            onChange={(e) => handleProductsChange('topDayProductsId', e.target.value)}
+          />
+          <Text fontSize="sm" color="gray.500">Insira uma lista de IDs dos produtos mais pedidos durante o dia.</Text>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Tabela de Cardápio Noturno:</FormLabel>
+          <Input
+            type="file"
+            onChange={(e) => handleFileUpload('nightCsvFile', e.target.files[0])}
+          />
+          <Text fontSize="sm" color="gray.500">Envie um arquivo .csv ou .xlsx com o cardápio noturno.</Text>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Lista de IDs dos Produtos Mais Pedidos Noturno:</FormLabel>
+          <Input
+            type="text"
+            value={products.topNightProductsId}
+            onChange={(e) => handleProductsChange('topNightProductsId', e.target.value)}
+          />
+          <Text fontSize="sm" color="gray.500">Insira uma lista de IDs dos produtos mais pedidos durante a noite.</Text>
+        </FormControl>
+      </VStack>
+    </Box>
   );
 }
 
