@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Heading, Switch, FormControl, FormLabel, VStack, Text } from '@chakra-ui/react';
+import { handleChatbotConfigChange } from './functions';
+import { ProfileContext } from '../../contexts/Profile';
 
-function Groups({ groups, setGroups }) {
+function Groups({ groups, setGroups, setSyncStatus }) {
+  const { profile, } = useContext(ProfileContext);
+
   const handleGroupChange = (field) => {
-    setGroups(prevGroups => ({
-      ...prevGroups,
-      [field]: !prevGroups[field]
+    handleChatbotConfigChange(field, groups[field], profile.phoneNumber, setSyncStatus);
+    setGroups(groups => ({
+      ...groups,
+      [field]: !groups[field]
     }));
   };
 

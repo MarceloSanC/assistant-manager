@@ -1,19 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Box, Heading, Input, FormControl, FormLabel, VStack, Text } from '@chakra-ui/react';
+import { handleChatbotConfigChange, formatProductList } from './functions';
+import { ProfileContext } from '../../contexts/Profile';
 
-function Products({ products, setProducts }) {
+function Products({ products, setProducts, setSyncStatus }) {
+  const { profile, } = useContext(ProfileContext);
+  
   const handleProductsChange = (field, value) => {
     setProducts((prevProducts) => ({
       ...prevProducts,
       [field]: value,
     }));
+    handleChatbotConfigChange(field, value, profile.phoneNumber, setSyncStatus);
   };
 
   const handleFileUpload = (field, file) => {
-    setProducts((prevProducts) => ({
-      ...prevProducts,
-      [field]: file,
-    }));
+    if (file) {
+      formatProductList(file, (formattedList) => {
+        setProducts((prevProducts) => ({
+          ...prevProducts,
+          [field]: formattedList,
+        }));
+        handleChatbotConfigChange(field, formattedList, profile.phoneNumber, setSyncStatus);
+      });
+    }
   };
 
   return (

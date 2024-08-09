@@ -1,12 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Box, Heading, FormControl, FormLabel, Input, VStack, Text } from '@chakra-ui/react';
+import { handleChatbotConfigChange } from './functions';
+import { ProfileContext } from '../../contexts/Profile';
 
-function Messages({ messages, setMessages }) {
+function Messages({ messages, setMessages, setSyncStatus }) {
+  const { profile, } = useContext(ProfileContext);
+
   const handleMessagesChange = (field, value) => {
     setMessages(prevMessages => ({
       ...prevMessages,
       [field]: value
     }));
+    handleChatbotConfigChange(field, value, profile.phoneNumber, setSyncStatus);
   };
 
   return (

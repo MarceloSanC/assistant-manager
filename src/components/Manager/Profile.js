@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Heading, Input, FormControl, FormLabel, Image, VStack, Text } from '@chakra-ui/react';
+import { ProfileContext } from '../../contexts/Profile';
+import { handleChatbotConfigChange } from './functions';
 
-function Profile({ profile, setProfile }) {
+function Profile({ setSyncStatus }) {
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const { profile, setProfile } = useContext(ProfileContext);
 
   useEffect(() => {
     if (profile.profileImage) {
@@ -20,6 +23,7 @@ function Profile({ profile, setProfile }) {
         ...prevProfile,
         profileImage: file,
       }));
+      handleChatbotConfigChange('profileImage', file, profile.phoneNumber, setSyncStatus);
     }
   };
 
@@ -29,6 +33,7 @@ function Profile({ profile, setProfile }) {
       ...prevProfile,
       [name]: value,
     }));
+    handleChatbotConfigChange(name, value, profile.phoneNumber, setSyncStatus);
   };
 
   return (

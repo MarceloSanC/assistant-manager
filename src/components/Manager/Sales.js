@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Heading, FormControl, FormLabel, Switch, Input, VStack, Text } from '@chakra-ui/react';
+import { handleChatbotConfigChange } from './functions';
+import { ProfileContext } from '../../contexts/Profile';
 
-function Sales({ sales, setSales }) {
+function Sales({ sales, setSales, setSyncStatus }) {
+  const { profile, } = useContext(ProfileContext);
+
   const handleSalesChange = (field) => {
-    setSales(prevSales => ({
-      ...prevSales,
-      [field]: !prevSales[field]
+    setSales(sales => ({
+      ...sales,
+      [field]: !sales[field]
     }));
+    handleChatbotConfigChange(field, sales[field], profile.phoneNumber, setSyncStatus);
   };
 
   const handleTimeChange = (e) => {
     const value = e.target.value;
-    setSales(prevSales => ({
-      ...prevSales,
+    setSales(sales => ({
+      ...sales,
       timeToOfferRecurringProducts: value
     }));
+    handleChatbotConfigChange('timeToOfferRecurringProducts', sales.timeToOfferRecurringProducts, profile.phoneNumber, setSyncStatus);
   };
 
   return (

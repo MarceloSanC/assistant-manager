@@ -2,6 +2,8 @@ import * as XLSX from "xlsx";
 
 const url = "http://54.227.229.46:5002/config/";
 
+const timers = {};
+
 // Função activateChatbot que gera o objeto chatbot e envia para o endpoint
 const activateChatbot = async (chatbotConfig, setQrCode, setIsLoading, setQrError) => {
   const myHeaders = new Headers();
@@ -39,7 +41,7 @@ const activateChatbot = async (chatbotConfig, setQrCode, setIsLoading, setQrErro
   };
 
   try {
-    const response = await fetch(url + 'createChatbot', requestOptions); //http://54.227.229.46:5002
+    const response = await fetch(url + 'createChatbot', requestOptions);
     const result = await response.json();
     console.log('QR Code: ', result);
     setQrCode(result);
@@ -77,27 +79,32 @@ const formatProductList = async (file, callback) => {
   reader.readAsBinaryString(file);
 };
 
-let timeoutId;
-
 const debounce = (callback, delay) => {
-  return (...args) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
+  return (field, value, phoneNumber, setSyncStatus) => {
+    setSyncStatus('salvando...');
+    if (timers[field]) {
+      clearTimeout(timers[field]);
     }
-    timeoutId = setTimeout(() => {
-      callback(...args);
+    timers[field] = setTimeout(() => {
+      callback(field, value, phoneNumber, setSyncStatus);
+      delete timers[field];
     }, delay);
   };
 };
 
-const sendUpdate = async (field, value) => {
+const sendUpdate = async (field, value, phoneNumber, setSyncStatus) => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   const body = JSON.stringify({
     field,
     value,
+    phoneNumber: phoneNumber,
+    interaction: 'update-chatbot',
+    platform: 'wppconnect',
   });
+
+  console.log(body);
 
   const requestOptions = {
     method: "POST",
@@ -108,18 +115,17 @@ const sendUpdate = async (field, value) => {
 
   try {
     const response = await fetch(url + 'updateChatbot', requestOptions);
-    const result = await response.json();
-    console.log('Update result: ', result);
+    if (response.ok) {
+      setSyncStatus('salvo');
+    } else {
+      throw new Error('Erro de sincronização');
+    }
   } catch (error) {
-    console.error(error);
+    setSyncStatus('erro de sincronização');
   }
 };
 
-const debouncedSendUpdate = debounce(sendUpdate, 5000);
-
-const handleChatbotConfigChange = (category, key, value) => {
-  debouncedSendUpdate(`${category}.${key}`, value);
-};
+const handleChatbotConfigChange = debounce(sendUpdate, 5000);
 
 const handlePageConfigChange = (setPageConfig, key, value) => {
   setPageConfig((prevConfig) => ({
@@ -128,18 +134,9 @@ const handlePageConfigChange = (setPageConfig, key, value) => {
   }));
 };
 
-const handleFileUpload = (setChatbotConfig, section, key, file) => {
-  if (file) {
-    formatProductList(file, (formattedList) => {
-      handleChatbotConfigChange(setChatbotConfig, section, key, formattedList);
-    });
-  }
-};
-
 export {
   activateChatbot,
   formatProductList,
   handleChatbotConfigChange,
-  handlePageConfigChange,
-  handleFileUpload
+  handlePageConfigChange
 };

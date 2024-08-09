@@ -8,7 +8,8 @@ import Groups from './Groups';
 import Sales from './Sales';
 import Messages from './Messages';
 import Session from './Session';
-import { handlePageConfigChange, handleFileUpload } from './functions';
+import { handlePageConfigChange } from './functions';
+import { ProfileProvider } from '../../contexts/Profile';
 
 function Manager() {
   const [pageConfig, setPageConfig] = useState({
@@ -17,12 +18,6 @@ function Manager() {
     isLoading: false,
     qrCode: null,
     qrError: null
-  });
-
-  const [profile, setProfile] = useState({
-    establishmentName: "Toca do Surubim",
-    phoneNumber: "+55 (48) 99148-7526",
-    profileImage: null
   });
 
   const [products, setProducts] = useState({
@@ -62,119 +57,102 @@ function Manager() {
     qrCode: null
   });
 
+  const [syncStatus, setSyncStatus] = useState('salvo'); // 'salvo', 'salvando...', 'erro de sincronização'
+
   const renderSection = () => {
     switch (pageConfig.currentSection) {
       case 'profile':
-        return (
-          <Profile
-            profile={profile}
-            setProfile={setProfile}
-          />
-        );
+        return <Profile setSyncStatus={setSyncStatus} />;
       case 'products':
-        return (
-          <Products
-            products={products}
-            handleFileUpload={(key, file) => handleFileUpload(setProducts, key, file)}
-            setProducts={setProducts}
-          />
-        );
+        return <Products products={products} setProducts={setProducts} setSyncStatus={setSyncStatus} />;
       case 'modality':
-        return (
-          <Modality
-            modality={modality}
-            setModality={setModality}
-          />
-        );
+        return <Modality modality={modality} setModality={setModality} setSyncStatus={setSyncStatus} />;
       case 'groups':
-        return (
-          <Groups
-            groups={groups}
-            setGroups={setGroups}
-          />
-        );
+        return <Groups groups={groups} setGroups={setGroups} setSyncStatus={setSyncStatus} />;
       case 'sales':
-        return (
-          <Sales
-            sales={sales}
-            setSales={setSales}
-          />
-        );
+        return <Sales sales={sales} setSales={setSales} setSyncStatus={setSyncStatus} />;
       case 'messages':
-        return (
-          <Messages
-            messages={messages}
-            setMessages={setMessages}
-          />
-        );
+        return <Messages messages={messages} setMessages={setMessages} setSyncStatus={setSyncStatus} />;
       case 'session':
-        return (
-          <Session
-            session={session}
-            setSession={setSession}
-          />
-        );
+        return <Session session={session} setSession={setSession} setSyncStatus={setSyncStatus} />;
       default:
         return null;
     }
   };
 
   return (
-    <Flex direction="column" align="center" p={4}>
-      <Flex justify="space-between" align="center" width="100%" mb={4}>
-        <Image src={logoBix} alt="Logo Bix" maxWidth="100px" height="auto" cursor="pointer" onClick={() => window.location.href = '/'}/>
-        <Heading as="h1" size="lg" fontStyle='roboto'>Gerenciador Assistente Bix</Heading>
+    <ProfileProvider>
+      {/* Seção Heading */}
+      <Flex direction="column" width="100%">
+        <Flex justify="space-between" align="center" bg="blue.600" p={4} width="100%">
+          <Image src={logoBix} alt="Logo Bix" maxWidth="100px" height="auto" cursor="pointer" onClick={() => window.location.href = '/'} />
+          <Heading as="h1" size="lg" color="white">Gerenciador Assistente Bix</Heading>
+        </Flex>
+
+        {/* Painel Principal */}
+        <Flex direction="column" flex="1" width="100%">
+          {/* Barra de Ferramentas */}
+          <Box bg="gray.200" p={2} height="20px">
+            <Flex justify="flex-end" align="center" height="100%">
+              {syncStatus === 'salvo' && <Box color="green.500">Salvo ✓</Box>}
+              {syncStatus === 'salvando...' && <Box color="blue.500">Salvando...</Box>}
+              {syncStatus === 'erro de sincronização' && <Box color="red.500">Erro de Sincronização</Box>}
+            </Flex>
+          </Box>
+
+          {/* Painel de Conteúdo */}
+          <Flex width="100%" justify="center">
+            <VStack align="stretch" spacing={4} width="20%" bg="white" p={4}>
+              <Button
+                colorScheme={pageConfig.currentSection === 'session' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
+              >
+                Sessão Whats App
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'profile' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'profile')}
+              >
+                Perfil Whats App
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'products' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'products')}
+              >
+                Produtos e Adicionais
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'modality' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'modality')}
+              >
+                Modalidade
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'groups' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'groups')}
+              >
+                Grupos
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'sales' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'sales')}
+              >
+                Vendas
+              </Button>
+              <Button
+                colorScheme={pageConfig.currentSection === 'messages' ? 'blue' : 'gray'}
+                onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'messages')}
+              >
+                Mensagens
+              </Button>
+            </VStack>
+            <Box flex="1" p={4}>
+              {renderSection()}
+            </Box>
+          </Flex>
+        </Flex>
       </Flex>
-      <Flex width="100%" justify="center">
-        <VStack align="stretch" spacing={4} width="20%">
-          <Button
-            colorScheme={pageConfig.currentSection === 'session' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'session')}
-          >
-            Sessão Whats App
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'profile' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'profile')}
-          >
-            Perfil Whats App
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'products' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'products')}
-          >
-            Produtos e Adicionais
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'modality' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'modality')}
-          >
-            Modalidade
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'groups' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'groups')}
-          >
-            Grupos
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'sales' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'sales')}
-          >
-            Vendas
-          </Button>
-          <Button
-            colorScheme={pageConfig.currentSection === 'messages' ? 'blue' : 'gray'}
-            onClick={() => handlePageConfigChange(setPageConfig, 'currentSection', 'messages')}
-          >
-            Mensagens
-          </Button>
-        </VStack>
-        <Box flex="1" p={4}>
-          {renderSection()}
-        </Box>
-      </Flex>
-    </Flex>
+    </ProfileProvider>
   );
 }
 
