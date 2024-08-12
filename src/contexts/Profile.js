@@ -5,7 +5,8 @@ export const ProfileContext = createContext();
 export const ProfileProvider = ({ children }) => {
   const [profile, setProfile] = useState({
     establishmentName: "Toca do Surubim",
-    phoneNumber: "+55 (48) 99148-7526",
+    phoneNumber: "(48) 9 9148-7526",
+    countryCode: "+55",
     profileImage: null
   });
 

@@ -35,6 +35,8 @@ function Products({ products, setProducts, setSyncStatus }) {
           <Input
             type="file"
             onChange={(e) => handleFileUpload('dayCsvFile', e.target.files[0])}
+            height="40px"
+            p={1}
           />
           <Text fontSize="sm" color="gray.500">Envie um arquivo .csv ou .xlsx com o cardápio diurno.</Text>
         </FormControl>
@@ -52,6 +54,8 @@ function Products({ products, setProducts, setSyncStatus }) {
           <Input
             type="file"
             onChange={(e) => handleFileUpload('nightCsvFile', e.target.files[0])}
+            height="40px"
+            p={1}
           />
           <Text fontSize="sm" color="gray.500">Envie um arquivo .csv ou .xlsx com o cardápio noturno.</Text>
         </FormControl>
