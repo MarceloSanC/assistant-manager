@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import { Box, Heading, FormControl, FormLabel, Select, Input, VStack, Text } from '@chakra-ui/react';
 import { handleChatbotConfigChange } from './functions';
-import { ProfileContext } from '../../contexts/Profile';
+import { ProfileContext } from '../../hooks/ProfileContext';
 
 function Modality({ modality, setModality, setSyncStatus }) {
   const { profile, } = useContext(ProfileContext);

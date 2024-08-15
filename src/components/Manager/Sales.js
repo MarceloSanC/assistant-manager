@@ -1,66 +1,94 @@
-import React, { useContext } from 'react';
-import { Box, Heading, FormControl, FormLabel, Switch, Input, VStack, Text } from '@chakra-ui/react';
-import { handleChatbotConfigChange } from './functions';
-import { ProfileContext } from '../../contexts/Profile';
+import React, { useContext } from "react";
+import { Box, Heading, FormLabel, Switch, Input, VStack, Text, Divider } from "@chakra-ui/react";
+import { handleChatbotConfigChange } from "./functions";
+import { ProfileContext } from "../../hooks/ProfileContext";
+import { SessionContext } from '../../hooks/SessionContext';
 
 function Sales({ sales, setSales, setSyncStatus }) {
-  const { profile, } = useContext(ProfileContext);
+  const { profile } = useContext(ProfileContext);
+  const { session, } = useContext(SessionContext);
+
+  const updateData = (key, value) => {
+    if (session.connectionStatus === 'connected' || session.connectionStatus === 'disconnected'){
+      handleChatbotConfigChange(key, value, `${profile.countryCode} ${profile.phoneNumber}`, setSyncStatus);
+    }
+  }
 
   const handleSalesChange = (field) => {
-    setSales(sales => ({
+    setSales((sales) => ({
       ...sales,
-      [field]: !sales[field]
+      [field]: !sales[field],
     }));
-    handleChatbotConfigChange(field, sales[field], profile.phoneNumber, setSyncStatus);
+    updateData(field, sales[field]);
   };
 
   const handleTimeChange = (e) => {
     const value = e.target.value;
-    setSales(sales => ({
+    setSales((sales) => ({
       ...sales,
-      timeToOfferRecurringProducts: value
+      timeToOfferRecurringProducts: value,
     }));
-    handleChatbotConfigChange('timeToOfferRecurringProducts', sales.timeToOfferRecurringProducts, profile.phoneNumber, setSyncStatus);
+    updateData("timeToOfferRecurringProducts", value);
   };
 
   return (
     <Box className="form-section" p={5}>
-      <Heading as="h2" size="md" mb={4}>Vendas</Heading>
-      <VStack spacing={4} align="stretch">
-        <FormControl display="flex" alignItems="center">
+      <Heading as="h1" size="lg" mb={6}>
+        Vendas
+      </Heading>
+
+      <Box mb={4}>
+        <Heading as="h2" size="md" mb={4}>
+          Produtos Recomendados
+        </Heading>
+        <VStack spacing={4} align="left">
           <FormLabel htmlFor="product-recommendations" mb="0">
             Recomendação de Produtos:
           </FormLabel>
           <Switch
             id="product-recommendations"
             isChecked={sales.productRecommendations}
-            onChange={() => handleSalesChange('productRecommendations')}
+            onChange={() => handleSalesChange("productRecommendations")}
           />
-          <Text fontSize="sm" color="gray.500" ml={2}>Ative ou desative a recomendação de produtos.</Text>
-        </FormControl>
-        <FormControl display="flex" alignItems="center">
+        </VStack>
+        <Text fontSize="sm" color="gray.500" mt={2} mb={4}>
+          Ative ou desative a recomendação de produtos.
+        </Text>
+        <Divider borderColor="gray.200" />
+      </Box>
+
+      <Box mb={4}>
+        <Heading as="h2" size="md" mb={4}>
+          Produtos Recorrentes
+        </Heading>
+        <VStack spacing={4} align="left">
           <FormLabel htmlFor="recurring-products-resell" mb="0">
             Revenda de Produtos Recorrentes:
           </FormLabel>
           <Switch
             id="recurring-products-resell"
             isChecked={sales.recurringProductsResell}
-            onChange={() => handleSalesChange('recurringProductsResell')}
+            onChange={() => handleSalesChange("recurringProductsResell")}
           />
-          <Text fontSize="sm" color="gray.500" ml={2}>Ative ou desative a revenda de produtos recorrentes.</Text>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Tempo para Oferecer Produtos Recorrentes:</FormLabel>
+        </VStack>
+        <Text fontSize="sm" color="gray.500" mt={2} mb={4}>
+          Ative ou desative a revenda de produtos recorrentes.
+        </Text>
+
+        <VStack spacing={4} align="left">
+          <FormLabel htmlFor="time-to-offer" mb="0">
+            Tempo para Oferecer Produtos Recorrentes:
+          </FormLabel>
           <Input
+            id="time-to-offer"
             type="text"
             style={{ width: "10%", minWidth: "100px", textAlign: "center" }}
             value={sales.timeToOfferRecurringProducts}
             onChange={handleTimeChange}
-            placeholder="hh:mm"
           />
-          <Text fontSize="sm" color="gray.500">Insira o tempo para oferecer produtos recorrentes.</Text>
-        </FormControl>
-      </VStack>
+        </VStack>
+        <Divider borderColor="gray.200" />
+      </Box>
     </Box>
   );
 }
