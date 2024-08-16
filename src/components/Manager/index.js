@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Box, Button, Flex, Heading, HStack, Image, VStack } from "@chakra-ui/react";
-import logoBix from "../../assets/images/Logo-Bix.png";
+import logoBix from "../../assets/images/Logo.png";
 import Profile from "./Profile";
 import Products from "./Products";
 import OnlineMenu from "./OnlineMenu";

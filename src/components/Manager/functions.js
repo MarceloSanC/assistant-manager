@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 
-const url = "http://localhost:5002/config/";
+const url = "http://54.227.229.46:5002/config/";
 
 const timers = {};
 
@@ -22,7 +22,7 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
     config: {
       recurrentTime: chatbotConfig.sales.timeToOfferRecurringProducts,
       recurrentCategories: chatbotConfig.sales.recurrentCategories || [],
-      timeToCloseBill: chatbotConfig.sales.timeToCloseBill || 30,
+      timeToCloseBill: chatbotConfig.sales.timeToCloseBill || 60*60*1000,
       flow: chatbotConfig.sales.flow || ["WhatsApp"],
       modality: [chatbotConfig.modality.modality],
       groupNames: groupNames,
