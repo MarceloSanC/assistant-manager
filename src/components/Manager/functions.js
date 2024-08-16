@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 
-const url = "http://localhost:5002/config/";
+const url = "http://54.227.229.46:5002/config/";
 
 const timers = {};
 
