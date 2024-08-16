@@ -141,12 +141,20 @@ function Manager() {
       <ProfileProvider>
         <Flex direction="column" width="100%">
           {/* Cabeçalho */}
-          <Flex justify="flex-start" align="center" bg="blue.600" p={4} width="100%">
+          <Flex justify="flex-start" align="center" bg="#4b5e7d" p={4} width="100%">
             {/* Logo à esquerda */}
             <Image src={logoBix} alt="Logo Bix" maxWidth="100px" height="auto" cursor="pointer" onClick={() => (window.location.href = "/")} />
 
             {/* Texto ao lado da logo */}
-            <Heading as="h1" size="lg" color="white" ml={4}>
+            <Heading
+              as="h1"
+              paddingLeft={50}
+              size="lg"
+              color="white"
+              ml={4}
+              fontFamily="Helvetica"
+              fontSize="4xl"
+            >
               Gerenciador Assistente Bix
             </Heading>
           </Flex>

@@ -45,14 +45,19 @@ function Session({ session, setSession, chatbotConfig }) {
           {session.isLoading ? (
             <Spinner size="xl" />
           ) : session.qrCode ? (
-            <Image src={`data:image/png;base64,${session.qrCode}`} alt="QR Code" boxSize="264px" />
+            <VStack maxWidth={270}>
+              <Image src={`data:image/png;base64,${session.qrCode}`} alt="QR Code" boxSize="264px" />
+              <Text fontSize="sm" color="red.500" mt={2}>
+                Recarrege a página se precisar gerar um novo QRCode.
+              </Text>
+            </VStack>
           ) : session.qrError ? (
             <Box textAlign="center">
               <Text fontSize="xl" color="red.500">
                 X
               </Text>
               <Text fontSize="sm" color="gray.500" mt={2}>
-                Falha ao gerar QR Code, tente novamente mais tarde.
+                Falha ao gerar QR Code, reinicie a página e tente novamente mais tarde.
               </Text>
             </Box>
           ) : (
