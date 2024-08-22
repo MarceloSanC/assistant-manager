@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 
-const url = "https://54.227.229.46:5002/config/";
+const url = "http://localhost:5002/config/";
 
 const timers = {};
 
@@ -22,11 +22,11 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
     config: {
       recurrentTime: chatbotConfig.sales.timeToOfferRecurringProducts,
       recurrentCategories: chatbotConfig.sales.recurrentCategories || [],
-      timeToCloseBill: chatbotConfig.sales.timeToCloseBill || 60*60*1000,
+      timeToCloseBill: chatbotConfig.sales.timeToCloseBill || 60 * 60 * 1000,
       flow: chatbotConfig.sales.flow || ["WhatsApp"],
       modality: [chatbotConfig.modality.modality],
       groupNames: groupNames,
-      topProductsId: [chatbotConfig.products.topDayProductsId, chatbotConfig.products.topNightProductsId],
+      topProductsId: [chatbotConfig.products.topDayProductsId.split(","), chatbotConfig.products.topNightProductsId.split(",")],
       orderCompletionMessage: chatbotConfig.messages.orderCompletionMessage || "Um garçom irá trazer o seu pedido",
       serviceOptions: {
         pedidos: chatbotConfig.groups.orders,
@@ -35,12 +35,13 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
         garcom: chatbotConfig.groups.waiter,
         faq: true,
         pesquisaSatisfacao: chatbotConfig.sales.satisfactionPoll,
+        onlyTopProducts: chatbotConfig.sales.onlyTopProducts,
         "cardapio-online": chatbotConfig.onlineMenu.enabled,
       },
       tableInterval: {
         min: chatbotConfig.modality.tableInterval.min,
         max: chatbotConfig.modality.tableInterval.max,
-        excludedValues: chatbotConfig.modality.tableInterval.excludedValues,
+        excludedValues: chatbotConfig.modality.excludedValues.split(","),
       },
       url: {
         cardapio: chatbotConfig.onlineMenu.link,
@@ -60,22 +61,84 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
   try {
     const response = await fetch(url + "createChatbot", requestOptions);
     const result = await response.json();
-    console.log("QR Code: ", result);
-    setSession((prevSession) => ({
-      ...prevSession,
-      qrCode: result,
-    }));
+    console.log("response: ", result);
+
+    if (result.status === "QRCODE") {
+      setSession((prevSession) => ({
+        ...prevSession,
+        qrCode: result.qrcode,
+        connectionStatus: "waiting-scan",
+        isLoading: false,
+        qrError: null,
+      }));
+      const intervalId = setInterval(() => {
+        checkConnectionStatus(chatbotConfig, setSession, intervalId);
+      }, 10000);
+    } else if (result.status === "CONNECTED") {
+      setSession((prevSession) => ({
+        ...prevSession,
+        qrCode: null,
+        connectionStatus: "online",
+        isLoading: false,
+        qrError: null,
+      }));
+    } else if (result.status === "ERROR") {
+      setSession((prevSession) => ({
+        ...prevSession,
+        qrCode: null,
+        connectionStatus: "",
+        isLoading: false,
+        qrError: true,
+      }));
+    }
   } catch (error) {
     console.error(error);
     setSession((prevSession) => ({
       ...prevSession,
+      qrCode: null,
+      connectionStatus: "",
+      isLoading: false,
       qrError: true,
     }));
-  } finally {
-    setSession((prevSession) => ({
-      ...prevSession,
-      isLoading: false,
-    }));
+  }
+};
+
+const checkConnectionStatus = async (chatbotConfig, setSession, intervalId) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const phoneNumber = chatbotConfig.profile.countryCode + chatbotConfig.profile.phoneNumber;
+
+  const body = JSON.stringify({
+    phoneNumber: phoneNumber,
+    platform: 'wppconnect',
+    interaction: "check-connection-session",
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(url + "checkConnectionSession", requestOptions);
+    const result = await response.json();
+
+    if (result.status === true && result.message === "Connected") {
+      setSession((prevSession) => ({
+        ...prevSession,
+        connectionStatus: "online",
+        isLoading: false,
+        qrCode: null,
+        qrError: null,
+      }));
+
+      clearInterval(intervalId);
+    }
+  } catch (error) {
+    console.error("Erro ao verificar a conexão:", error);
   }
 };
 
@@ -112,7 +175,7 @@ const formatProductList = (file, callback) => {
     jsonData.forEach((item, index) => {
       const category = item.Categoria;
       const productId = item.Codigo;
-      const valorFormatado = parseFloat(item.Valor.toString().replace(',', '.'));
+      const valorFormatado = parseFloat(item.Valor.toString().replace(",", "."));
 
       // Validate each column's data type
       if (typeof item.NomeProduto !== "string") {
@@ -126,7 +189,7 @@ const formatProductList = (file, callback) => {
       }
       if (isNaN(valorFormatado)) {
         errors.push(`"${valorFormatado}" [L${index + 1}; Valor] deve ser um número válido.`);
-      }  
+      }
 
       // Skip invalid rows
       if (errors.length === 0) {

@@ -44,7 +44,7 @@ function Manager() {
 
   const [modality, setModality] = useState({
     modality: "Mesa",
-    tableInterval: { min: 1, max: 10 },
+    tableInterval: { min: 1, max: 100 },
     excludedValues: "",
   });
 
@@ -56,6 +56,7 @@ function Manager() {
   });
 
   const [sales, setSales] = useState({
+    onlyTopProducts: false,
     productRecommendations: true,
     recurringProductsResell: true,
     timeToOfferRecurringProducts: "30",
@@ -70,6 +71,21 @@ function Manager() {
 
   const renderSection = () => {
     switch (pageConfig.currentSection) {
+      case "session":
+        return (
+          <Session
+            session={session}
+            setSession={setSession}
+            chatbotConfig={{
+              products: products,
+              modality: modality,
+              groups: groups,
+              sales: sales,
+              messages: messages,
+              onlineMenu: onlineMenu,
+            }}
+          />
+        );
       case "profile":
         return <Profile setSyncStatus={(status) => setSession((prev) => ({ ...prev, syncStatus: status }))} />;
       case "products":
@@ -116,21 +132,6 @@ function Manager() {
             setSyncStatus={(status) => setSession((prev) => ({ ...prev, syncStatus: status }))}
           />
         );
-      case "session":
-        return (
-          <Session
-            session={session}
-            setSession={setSession}
-            chatbotConfig={{
-              products: products,
-              modality: modality,
-              groups: groups,
-              sales: sales,
-              messages: messages,
-              onlineMenu: onlineMenu,
-            }}
-          />
-        );
       default:
         return null;
     }
@@ -146,15 +147,7 @@ function Manager() {
             <Image src={logoBix} alt="Logo Bix" maxWidth="100px" height="auto" cursor="pointer" onClick={() => (window.location.href = "/")} />
 
             {/* Texto ao lado da logo */}
-            <Heading
-              as="h1"
-              paddingLeft={50}
-              size="lg"
-              color="white"
-              ml={4}
-              fontFamily="Helvetica"
-              fontSize="4xl"
-            >
+            <Heading as="h1" paddingLeft={50} size="lg" color="white" ml={4} fontFamily="Helvetica" fontSize="4xl">
               Gerenciador Assistente Bix
             </Heading>
           </Flex>
@@ -168,6 +161,7 @@ function Manager() {
                 <Box onClick={() => handlePageConfigChange(setPageConfig, "currentSection", "session")} cursor="pointer">
                   {session.connectionStatus === "online" && <Box color="green.500">Status Chatbot: Online</Box>}
                   {session.connectionStatus === "disable" && <Box color="gray.500">Status Chatbot: Desabilitado</Box>}
+                  {session.connectionStatus === "waiting-scan" && <Box color="blue.500">Status Chatbot: Aguardando Sincronização</Box>}
                   {session.connectionStatus === "offline" && <Box color="red.500">Status Chatbot: Offline</Box>}
                 </Box>
                 <Box height="15px" borderLeft="1px" borderColor="gray.400" />

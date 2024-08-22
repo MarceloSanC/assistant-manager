@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Heading, FormLabel, Switch, Input, VStack, Text, Divider } from "@chakra-ui/react";
+import { Box, Heading, FormLabel, Switch, Input, VStack, Text } from "@chakra-ui/react";
 import { handleChatbotConfigChange } from "./functions";
 import { ProfileContext } from "../../hooks/ProfileContext";
 import { SessionContext } from '../../hooks/SessionContext';
@@ -39,6 +39,25 @@ function Sales({ sales, setSales, setSyncStatus }) {
 
       <Box mb={4}>
         <Heading as="h2" size="md" mb={4}>
+          Cardapio Whats App
+        </Heading>
+        <VStack spacing={4} align="left">
+          <FormLabel htmlFor="only-top-products" mb="0">
+            Mostrar apenas produtos mais pedidos:
+          </FormLabel>
+          <Switch
+            id="only-top-products"
+            isChecked={sales.onlyTopProducts}
+            onChange={() => handleSalesChange("onlyTopProducts")}
+          />
+        </VStack>
+        <Text fontSize="sm" color="gray.500" mt={2} mb={4}>
+          Ative para mostrar apenas a categoria dos produtos mais pedidos no fluxo do Cardapio no Whats App (O Cardapio online não é alterado).
+        </Text>
+      </Box>
+
+      <Box mb={4}>
+        <Heading as="h2" size="md" mb={4}>
           Produtos Recomendados
         </Heading>
         <VStack spacing={4} align="left">
@@ -54,7 +73,6 @@ function Sales({ sales, setSales, setSyncStatus }) {
         <Text fontSize="sm" color="gray.500" mt={2} mb={4}>
           Ative ou desative a recomendação de produtos.
         </Text>
-        <Divider borderColor="gray.200" />
       </Box>
 
       <Box mb={4}>
@@ -87,7 +105,6 @@ function Sales({ sales, setSales, setSyncStatus }) {
             onChange={handleTimeChange}
           />
         </VStack>
-        <Divider borderColor="gray.200" />
       </Box>
     </Box>
   );
