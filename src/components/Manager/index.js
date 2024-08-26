@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Box, Button, Flex, Heading, HStack, Image, VStack } from "@chakra-ui/react";
 import logoBix from "../../assets/images/Logo.png";
 import Profile from "./Profile";
@@ -10,12 +10,18 @@ import Groups from "./Groups";
 import Sales from "./Sales";
 import Messages from "./Messages";
 import Session from "./Session";
-import { handlePageConfigChange } from "./functions";
-import { ProfileProvider } from "../../hooks/ProfileContext";
+import { handlePageConfigChange, checkConnectionStatus } from "./functions";
+import { ProfileProvider, ProfileContext } from "../../hooks/ProfileContext";
 import { SessionProvider, SessionContext } from "../../hooks/SessionContext";
 
 function Manager() {
   const { session, setSession } = useContext(SessionContext);
+  const { profile } = useContext(ProfileContext);
+
+  useEffect(() => {
+    console.log('useEffect');
+    checkConnectionStatus(profile.countryCode + profile.phoneNumber, setSession);
+  }, [profile.phoneNumber, profile.countryCode, setSession]);
 
   const [pageConfig, setPageConfig] = useState({
     currentSection: "session",

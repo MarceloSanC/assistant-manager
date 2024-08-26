@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 
-const url = "http://54.227.229.46:5002/config/";
+const url = "http://54.227.229.46:5002/config/"; //localhost
 
 const timers = {};
 
@@ -63,6 +63,21 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
     const result = await response.json();
     console.log("response: ", result);
 
+    setSessionState(result, setSession, chatbot.phoneNumber);
+  } catch (error) {
+    console.error(error);
+    setSession((prevSession) => ({
+      ...prevSession,
+      qrCode: null,
+      connectionStatus: "",
+      isLoading: false,
+      qrError: true,
+    }));
+  }
+};
+
+const setSessionState = async (result, setSession, phoneNumber) => {
+  try {
     if (result.status === "QRCODE") {
       setSession((prevSession) => ({
         ...prevSession,
@@ -72,14 +87,14 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
         qrError: null,
       }));
       const intervalId = setInterval(() => {
-        checkConnectionStatus(chatbotConfig, setSession, intervalId);
+        checkConnectionStatus(phoneNumber, setSession, intervalId);
       }, 10000);
     } else if (result.status === "CONNECTED") {
       setSession((prevSession) => ({
-        ...prevSession,
-        qrCode: null,
+        syncStatus: "saved",
         connectionStatus: "online",
         isLoading: false,
+        qrCode: null,
         qrError: null,
       }));
     } else if (result.status === "ERROR") {
@@ -93,25 +108,17 @@ const activateChatbot = async (session, setSession, chatbotConfig) => {
     }
   } catch (error) {
     console.error(error);
-    setSession((prevSession) => ({
-      ...prevSession,
-      qrCode: null,
-      connectionStatus: "",
-      isLoading: false,
-      qrError: true,
-    }));
+    throw error;
   }
 };
 
-const checkConnectionStatus = async (chatbotConfig, setSession, intervalId) => {
+const checkConnectionStatus = async (phoneNumber, setSession, intervalId='') => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
-  const phoneNumber = chatbotConfig.profile.countryCode + chatbotConfig.profile.phoneNumber;
-
   const body = JSON.stringify({
     phoneNumber: phoneNumber,
-    platform: 'wppconnect',
+    platform: "wppconnect",
     interaction: "check-connection-session",
   });
 
@@ -128,7 +135,7 @@ const checkConnectionStatus = async (chatbotConfig, setSession, intervalId) => {
 
     if (result.status === true && result.message === "Connected") {
       setSession((prevSession) => ({
-        ...prevSession,
+        syncStatus: "saved",
         connectionStatus: "online",
         isLoading: false,
         qrCode: null,
@@ -222,6 +229,7 @@ const formatProductList = (file, callback) => {
 };
 
 const debounce = (callback, delay) => {
+  console.log("using debounce");
   return (field, value, phoneNumber, setSyncStatus) => {
     setSyncStatus("saving");
     if (timers[field]) {
@@ -276,4 +284,4 @@ const handlePageConfigChange = (setPageConfig, key, value) => {
   }));
 };
 
-export { activateChatbot, formatProductList, handleChatbotConfigChange, handlePageConfigChange };
+export { activateChatbot, formatProductList, handleChatbotConfigChange, handlePageConfigChange, checkConnectionStatus };
