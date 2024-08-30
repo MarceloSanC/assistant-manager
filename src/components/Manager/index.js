@@ -39,7 +39,7 @@ function Manager() {
 
   const [onlineMenu, setOnlineMenu] = useState({
     enabled: true,
-    link: "https://tocadosurubim.menudigital.net.br/#/catalogo",
+    link: "https://tocadosurubim.menudigital.net.br/#/",
   });
 
   const [functionalities, setFunctionalities] = useState({

@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 
-const url = "http://54.227.229.46:5002/config/"; //localhost
+const url = "https://atende.bixs.com.br/config/"; //localhost 
 
 const timers = {};
 
